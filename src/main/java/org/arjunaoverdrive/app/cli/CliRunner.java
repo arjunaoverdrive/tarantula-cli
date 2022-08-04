@@ -23,12 +23,15 @@ public class CliRunner {
         System.out.println(json);
     }
 
-    @ShellMethod(value = "Starts indexing. Without arguments indexes all sites specified in the application.yml.\n\tWhen run with a URL as a parameter, indexes the specified site")
-    public void index(@ShellOption( value = {"-u"}, defaultValue = "") String url, @ShellOption(value = {"-p"}, defaultValue = "")String page) throws JsonProcessingException {
+    @ShellMethod(value = "Starts indexing. Without arguments indexes all sites specified in the application.yml." +
+            "\n\tWhen run with the -u flag and a URL as a parameter, indexes the specified site;" +
+            "\n\twhen run with the -p flag and a page URL as a parameter, indexes a page")
+    public void index(@ShellOption( value = {"-u"}, defaultValue = "") String url, @ShellOption(value = {"-p"}, defaultValue = "")String page) {
         String json;
         if(!url.isEmpty()){
             json = controller.indexSite(url);
-        } else if(!page.isEmpty()){
+        }
+        else if(!page.isEmpty()){
             json = controller.indexPage(page);
         }
         else {

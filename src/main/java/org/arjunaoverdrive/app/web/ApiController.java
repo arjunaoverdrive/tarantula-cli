@@ -1,8 +1,6 @@
 package org.arjunaoverdrive.app.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +14,12 @@ import java.time.LocalDateTime;
 public class ApiController {
 
     private final RestService service;
-    private final ObjectMapper mapper;
+    private final JsonParser jsonParser;
 
     @Autowired
-    public ApiController(RestService service, ObjectMapper mapper) {
+    public ApiController(RestService service) {
         this.service = service;
-        this.mapper = mapper;
+        this.jsonParser = JsonParser.getJsonParser();
     }
 
     @GetMapping("/")
@@ -30,49 +28,34 @@ public class ApiController {
     }
 
     @GetMapping("/statistics")
-    public String getStatistics() throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-
+    public String getStatistics() {
         String json = service.getStatistics().getBody().toString();
-        JsonNode root = mapper.readTree(json);
-        String stats = JsonParser.traverse(root, 0);
-
-        return stats;
+        return jsonParser.convertJsonToString(json);
     }
 
     @GetMapping("/startIndexing")
-    public String startIndexing() throws JsonProcessingException {
+    public String startIndexing()  {
 
         String json = (String) service.startIndexing().getBody();
-        JsonNode root = mapper.readTree(json);
-        String response = JsonParser.traverse(root, 0);
-        return response;
+        return jsonParser.convertJsonToString(json);
     }
 
     @GetMapping("/stopIndexing")
-    public String stopIndexing() throws JsonProcessingException {
-
+    public String stopIndexing()  {
         String json = service.stopIndexing().getBody().toString();
-        JsonNode root = mapper.readTree(json);
-        String response = JsonParser.traverse(root, 0);
-        return response;
+        return jsonParser.convertJsonToString(json);
     }
 
     @PostMapping("/indexSite")
-    public String indexSite(@RequestParam(name = "url") String url) throws JsonProcessingException {
+    public String indexSite(@RequestParam(name = "url") String url)  {
 
         String json = service.indexSite(url).getBody().toString();
-        JsonNode root = mapper.readTree(json);
-        String response = JsonParser.traverse(root, 0);
-        return response;
+        return jsonParser.convertJsonToString(json);
     }
 
     @PostMapping("/indexPage")
-    public String indexPage(@RequestParam(name = "url") String url) throws JsonProcessingException{
+    public String indexPage(@RequestParam(name = "url") String url) {
         String json = service.indexPage(url).getBody().toString();
-        JsonNode root = mapper.readTree(json);
-        String response = JsonParser.traverse(root, 0);
-        return response;
-
+        return jsonParser.convertJsonToString(json);
     }
 }
