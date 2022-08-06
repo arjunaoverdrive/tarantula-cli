@@ -5,7 +5,9 @@ public enum Endpoints {
     START_URL("http://localhost:9999/admin/api/startIndexing"),
     STOP_URL("http://localhost:9999/admin/api/stopIndexing"),
     INDEX_PAGE("http://localhost:9999/admin/api/indexPage"),
-    INDEX_SITE("http://localhost:9999/admin/api/indexSite");
+    INDEX_SITE("http://localhost:9999/admin/api/indexSite"),
+    SEARCH("http://localhost:9999/admin/api/search"),
+    ERRORS("http://localhost:9999/admin/api/errors");
 
 
     Endpoints(String url) {

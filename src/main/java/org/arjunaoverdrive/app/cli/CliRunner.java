@@ -1,6 +1,7 @@
 package org.arjunaoverdrive.app.cli;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.arjunaoverdrive.app.web.ApiController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -41,11 +42,26 @@ public class CliRunner {
         System.out.println(json);
     }
 
-
-    @ShellMethod(value = "Stops indexing. Sometimes indexing doesn't stop immediately due to the specifics of the engine,\n\tbut if the command invocation returned true, it will be interrupted at some moment.")
+    @ShellMethod(value = "Stops indexing. Sometimes indexing doesn't stop immediately due to the specifics of the engine," +
+            "\n\tbut if the command invocation returned true, it will be interrupted at some moment.")
     public void stop() throws JsonProcessingException {
         String json = controller.stopIndexing();
         System.out.println(json);
     }
 
+    @ShellMethod(value = "Search string supplied as the query parameter. Options:\n\t" +
+            "-q - query to look for (required)\n\t-s - site\n\t-o offset (default 0)\n\t-l - limit(default 20).")
+    public void search(@ShellOption(value = {"-q"}) String query,
+                       @ShellOption(value = {"-s"}, defaultValue = "") String site,
+                       @ShellOption(value = {"-o"}, defaultValue = "0") String offset,
+                       @ShellOption(value = {"-l"}, defaultValue = "20") String limit){
+        String json = controller.search(query, site, Integer.valueOf(offset), Integer.valueOf(limit));
+        System.out.println(json);
+    }
+
+    @ShellMethod(value = "List pages not indexed due to status other than 200")
+    public void errors() throws JsonProcessingException{
+        String json = controller.getListOfErrorPages();
+        System.out.println(json);
+    }
 }

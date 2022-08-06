@@ -58,4 +58,18 @@ public class ApiController {
         String json = service.indexPage(url).getBody().toString();
         return jsonParser.convertJsonToString(json);
     }
+
+    @GetMapping("/search")
+    public String search(@RequestParam String query,
+                         @RequestParam(required = false) String site,
+                         @RequestParam(required = false) Integer offset,
+                         @RequestParam(required = false) Integer limit){
+        String json = service.search(query, site,offset, limit).getBody().toString();
+        return jsonParser.convertJsonToString(json);
+    }
+
+    public String getListOfErrorPages() {
+        String json = service.getListOfErrorPages().getBody().toString();
+        return jsonParser.convertJsonToString(json);
+    }
 }
